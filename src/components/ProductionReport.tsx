@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Ensure this is at the top
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -46,7 +46,6 @@ export function ProductionReport() {
         }
 
         if (endParam) {
-            console.log("endParam", endParam);
             const parsedDate = tryParseDateString(endParam);
             if (parsedDate) {
                 setEndDate(endOfDay(parsedDate));
@@ -98,8 +97,6 @@ export function ProductionReport() {
     }, [devices, selectedDevices, startDate, endDate, isLoaded]);
 
     const handleDateChange = (date: string, isStart: boolean) => {
-        console.log("date", date);
-
         const parsedDate = parseDateString(date);
         if (parsedDate) {
             if (isStart) {
@@ -188,6 +185,7 @@ export function ProductionReport() {
                                     Start Date
                                 </label>
                                 <input
+                                    id="startDateInput" // Add unique ID here
                                     type="date"
                                     value={format(startDate, "yyyy-MM-dd")}
                                     onChange={(e) =>
@@ -201,6 +199,7 @@ export function ProductionReport() {
                                     End Date
                                 </label>
                                 <input
+                                    id="endDateInput" // Add unique ID here
                                     type="date"
                                     value={format(endDate, "yyyy-MM-dd")}
                                     onChange={(e) =>
@@ -221,6 +220,7 @@ export function ProductionReport() {
                                         className="flex items-center"
                                     >
                                         <input
+                                            id={`checkbox-${device}`} // Add ID to each checkbox
                                             type="checkbox"
                                             checked={selectedDevices.includes(
                                                 device
@@ -255,11 +255,11 @@ export function ProductionReport() {
                 {reports.map(({ device, summary }, index) => (
                     <div
                         key={device}
-                        className={`print:w-[8.5in] print:h-[11in] print:m-0 print:p-8 ${
-                            index < reports.length - 1
+                        id={`report-${device}`} // Add ID for each report container
+                        className={`print:w-[8.5in] print:h-[11in] print:m-0 print:p-8 ${index < reports.length - 1
                                 ? "page-break-after-always"
                                 : ""
-                        }`}
+                            }`}
                     >
                         <Card className="h-full shadow-none print:shadow-none">
                             <CardHeader className="pb-4 border-b">
@@ -268,7 +268,10 @@ export function ProductionReport() {
                                         <span className="text-xl font-bold">
                                             {device} Production Report
                                         </span>
-                                        <span className="text-sm text-muted-foreground">
+                                        <span
+                                            className="text-sm text-muted-foreground"
+                                            id={`date-header-${device}`} // Add ID for date header
+                                        >
                                             {format(startDate, "MMM d, yyyy")} -{" "}
                                             {format(endDate, "MMM d, yyyy")}
                                         </span>
@@ -278,7 +281,10 @@ export function ProductionReport() {
                             <CardContent className="pt-6 flex flex-col gap-6">
                                 {/* Table Section */}
                                 <div>
-                                    <table className="w-full border-collapse">
+                                    <table
+                                        id={`table-${device}`} // Add ID for each table
+                                        className="w-full border-collapse"
+                                    >
                                         <thead>
                                             <tr className="bg-muted/50">
                                                 <th className="border px-4 py-2 text-left font-medium">
